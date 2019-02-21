@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="zh"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" name="viewport"><meta name="description" content="Aaron&#39;s blog"><meta name="keyword" content="blog,front end,css,html,javascript"><link rel="shortcut icon" href="/css/images/logo.png"><title>JavaScript设计模式(三) | Aaron&#39;s Blog</title><link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"><link href="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet"><style>a{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif}</style><link href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/styles/tomorrow.min.css" rel="stylesheet"><link rel="stylesheet" href="/css/style.css"><script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><script src="//cdnjs.cloudflare.com/ajax/libs/geopattern/1.2.3/js/geopattern.min.js"></script><script src="//cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });</script><script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script></head><div class="wechat-share"><img src="/css/images/logo.png" alt="logo"></div><body><div id="container"><header class="header fixed-header"><div class="header-container"><a class="home-link" href="/"><div class="logo"></div><span><svg height="60" width="250" id="header-svg"><symbol id="s-text"><text text-anchor="left" x="0%" y="50%" dy=".35em">Aaron's Blog</text></symbol><use class="text" xlink:href="#s-text"></use><use class="text" xlink:href="#s-text"></use><use class="text" xlink:href="#s-text"></use><use class="text" xlink:href="#s-text"></use><use class="text" xlink:href="#s-text"></use></svg><style>#header-svg{position:absolute;top:0}@media screen and (max-width:768px){#header-svg{top:-7px}}.text{fill:none;stroke-width:2;stroke-linejoin:round;stroke-dasharray:40 185;stroke-dashoffset:0;-webkit-animation:stroke 8s infinite linear;animation:stroke 8s infinite linear;font-size:40px;line-height:1;height:40px}.text:nth-child(5n+1){stroke:#f2385a;-webkit-animation-delay:-1.6s;animation-delay:-1.6s}.text:nth-child(5n+2){stroke:#f5a503;-webkit-animation-delay:-3.2s;animation-delay:-3.2s}.text:nth-child(5n+3){stroke:#42b983;-webkit-animation-delay:-4.8s;animation-delay:-4.8s}.text:nth-child(5n+4){stroke:#56d9cd;-webkit-animation-delay:-6.4s;animation-delay:-6.4s}.text:nth-child(5n+5){stroke:#3aa1bf;-webkit-animation-delay:-8s;animation-delay:-8s}@-webkit-keyframes stroke{100%{stroke-dashoffset:-225}}@keyframes stroke{100%{stroke-dashoffset:-225}}</style></span></a><ul class="right-list"><li class="list-item"><a href="/" class="item-link">Home</a></li><li class="list-item"><a href="/tags/" class="item-link">Tags</a></li><li class="list-item"><a href="/archives/" class="item-link">Archives</a></li><li class="list-item"><a href="/project/" class="item-link">Project</a></li><li class="list-item"><a href="/about/" class="item-link">About</a></li></ul><div class="menu"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></div><div class="menu-mask"><ul class="menu-list"><li class="menu-item"><a href="/" class="menu-link">Home</a></li><li class="menu-item"><a href="/tags/" class="menu-link">Tags</a></li><li class="menu-item"><a href="/archives/" class="menu-link">Archives</a></li><li class="menu-item"><a href="/project/" class="menu-link">Project</a></li><li class="menu-item"><a href="/about/" class="menu-link">About</a></li></ul></div></div></header><div id="article-banner"><h2>JavaScript设计模式(三)</h2><p class="post-date">2019-02-21</p></div><main class="app-body flex-box"><article class="post-article"><section class="markdown-content"><h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><p>MVC 是一种架构设计模式，他通过关注点分离来组织应用的代码。</p><p><img src="https://ws1.sinaimg.cn/large/e3c02d6fly1fx904t2c59j20gq08ajrr.jpg" alt=""></p><ul><li>Model(模型)，管理应用程序的数据，当 Model 发生改变会通知他的观察者(如 View)</li><li>View( 视图)，是 Model 的可视化表示，提供修改 Model 的视图界面</li><li>Controller（控制器），负责处理用户对 View 的操作并更新 Model</li></ul><p>MVC 中的这种关注点分离有利于进一步简化应用程序功能的模块化，并实现：</p><ul><li>整体维护更容易，程序分为 M,V,C 一目了然</li><li>更容易编写业务逻辑的单元测试</li><li>应用程序的模块划分，使得负责核心逻辑与负责用户界面的开发可以同时工作</li></ul><h1 id="MVP"><a href="#MVP" class="headerlink" title="MVP"></a>MVP</h1><p>MVP 中的 P 代表表示器(Presenter)，包含用于 View 的用户界面业务逻辑的组件。与 MVC 不同，来自 View 的请求委托给 Presenter,Precenter 与 View 解耦，通过接口交互。</p><p><img src="https://ws1.sinaimg.cn/large/e3c02d6fly1fxbaxtplyaj207v04ydfp.jpg" alt=""></p><p>MVP 中的视图被称为被动视图，它包含一点或零逻辑。View 与 Model 不直接交互，Presenter 负责监听更新 Model 与 View,。</p><h1 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h1><p>MVVM 是一种基于 MVC 与 MVP 的架构模式， 它试图更清晰地将  用户界面开发从应用程序的  业务逻辑与行为中分离。</p><p><img src="https://ws1.sinaimg.cn/large/e3c02d6fly1fxbb816ikpj20dz07eq33.jpg" alt=""></p><ul><li>Model 保存原始数据，ViewModel 监听 Model 的变化。</li><li>View 不负责状态处理，它与 ViewModel 的状态同步。</li><li>ViewModel 与 Model，View 互相绑定， 负责将 Model 数据转换为 View 数据，并将处理 View 操作并同步到 Model。</li></ul><p>优点：</p><ul><li>MVVM 使得 UI 和为 UI 提供驱动的行为模块的并行开发变得容易。</li><li>MVVM 使 View 抽象化，从而减少代码背后所需的业务逻辑量。</li><li>ViewModel 在单元测试中使用比在事件驱动代码中的使用更加容易。</li><li>不需要考虑 UI 自动化和交互就可以测试 ViewModel。</li></ul></section><div class="tags"><span>Tags:</span> <a href="/tags#design pattern"><span class="tag-code">design pattern</span></a></div><div class="nav-container"><a class="nav-left" href="/2019/02/19/sort-algorithm-2/"><span class="nav-arrow">← </span>排序算法之冒泡排序，快速排序 </a><a class="nav-right" href="/2019/02/21/sort-algorithm-3/">排序算法之选择排序，堆排序，归并排序 <span class="nav-arrow">→</span></a></div><div id="disqus_thread"></div></article><aside class="catalog-container"><div class="toc-main"><strong class="toc-title">Catalog</strong><ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#MVC"><span class="toc-nav-text">MVC</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#MVP"><span class="toc-nav-text">MVP</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#MVVM"><span class="toc-nav-text">MVVM</span></a></li></ol></div></aside></main><script>(function () {
+    var url = 'https://blog.noobcoder.club/2019/02/21/design-pattern-3/';
+    var banner = ''
+    if (banner !== '' && banner !== 'undefined' && banner !== 'null') {
+      $('#article-banner').css({
+        'background-image': 'url(' + banner + ')'
+      })
+    } else {
+      $('#article-banner').geopattern(url + Math.random())
+    }
+    $('.header').removeClass('fixed-header')
+
+    // error image
+    $(".markdown-content img").on('error', function () {
+      $(this).attr('src', 'http://file.muyutech.com/error-img.png')
+      $(this).css({
+        'cursor': 'default'
+      })
+    })
+
+    // zoom image
+    $(".markdown-content img").on('click', function () {
+      var src = $(this).attr('src')
+      if (src !== 'http://file.muyutech.com/error-img.png') {
+        var imageW = $(this).width()
+        var imageH = $(this).height()
+
+        var zoom = ($(window).width() * 0.95 / imageW).toFixed(2)
+        zoom = zoom < 1 ? 1 : zoom
+        zoom = zoom > 2 ? 2 : zoom
+        var transY = (($(window).height() - imageH) / 2).toFixed(2)
+
+        $('body').append('<div class="image-view-wrap"><div class="image-view-inner"><img src="' + src + '" /></div></div>')
+        $('.image-view-wrap').addClass('wrap-active')
+        $('.image-view-wrap img').css({
+          'width': `${imageW}`,
+          'transform': `translate3d(0, ${transY}px, 0) scale3d(${zoom}, ${zoom}, 1)`
+        })
+        $('html').css('overflow', 'hidden')
+
+        $('.image-view-wrap').on('click', function () {
+          $(this).remove()
+          $('html').attr('style', '')
+        })
+      }
+    })
+  })();</script><script>var disqus_shortname="aaron00101010",disqus_url="https://blog.noobcoder.club/2019/02/21/design-pattern-3/";!function(){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="//go.disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(e)}()</script><div class="scroll-top"><span class="arrow-icon"></span></div></div><footer class="app-footer"><p class="copyright">&copy; 2019 | Proudly powered by <a href="https://hexo.io" target="_blank">Hexo</a><br>Theme by <a href="https://github.com/yanm1ng">yanm1ng</a></p></footer><script>function async(e,n){var t=document,a="script",r=t.createElement(a),c=t.getElementsByTagName(a)[0];r.src=e,n&&r.addEventListener("load",function(e){n(null,e)},!1),c.parentNode.insertBefore(r,c)}</script><script>async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js",function(){FastClick.attach(document.body)})</script><script>var hasLine="true";async("//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js",function(){$("figure pre").each(function(t,a){var e=$(this).parents("figure");"false"===hasLine&&e.find(".gutter").hide();var i=e.attr("class").split(" ")[1]||"code",s=$(this).html(),h=document.createElement("code");h.className=i,h.innerHTML=s,$(this).attr("class","").empty().html(h),e.attr("data-lang",i.toUpperCase()),hljs.highlightBlock(a)})})</script><script src="/js/script.js"></script></body></html>
